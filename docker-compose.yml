@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+
+  fetch:
+    build: 
+      context: ./
+    volumes: 
+      - "./dist:/dist"
+      - "./src:/src"
+    command: /bin/sh
