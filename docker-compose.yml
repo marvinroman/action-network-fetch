@@ -5,7 +5,10 @@ services:
   fetch:
     build: 
       context: ./
+    container_name: iedsa_fetch
+    env_file:
+      - ./.env
     volumes: 
       - "./dist:/dist"
       - "./src:/src"
-    command: /bin/sh
+    command: ["/usr/bin/tail", "-f", "/dev/null"]
