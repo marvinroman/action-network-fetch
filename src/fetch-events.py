@@ -43,9 +43,9 @@ while current_page <= total_pages:
     # loop through returned events
     for event in json_response["_embedded"]["osdi:events"]:
         
-        # setup calendar boundaries
-        first_available = arrow.get("2021-02-04")
-        last_available = arrow.get("2021-02-04").shift(days=FUTURE_DAYS)
+        # setup calendar boundaries # TODO make dynamic once real events are created
+        first_available = arrow.get("2020-03-01")
+        last_available = arrow.get("2020-03-01").shift(days=FUTURE_DAYS)
         
         # if the event is between the calendar boundaries then add to output
         if arrow.get(event["start_date"]).is_between(first_available, last_available):
