@@ -7,7 +7,7 @@ import arrow
 import requests
 
 # Setup logging
-logging.basicConfig(format='%(asctime)s %(message)s', filename='/dist/fetch.log', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s %(message)s', filename='../dist/fetch.log', level=logging.INFO)
 
 # get settings
 API_KEY = os.getenv("API_KEY")
@@ -63,5 +63,5 @@ while current_page <= total_pages:
     current_page += 1
 
 # write out content
-with open('/dist/events.json', 'w', encoding='utf-8') as f:
+with open('../dist/events.json', 'w', encoding='utf-8') as f:
     json.dump(output, f, ensure_ascii=False, indent=4)
