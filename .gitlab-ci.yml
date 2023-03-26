@@ -27,12 +27,8 @@ before_script:
   - python --version  # For debugging
   - pip install arrow requests
 
-test:
-  script:
-    - echo $PWD
-    - ls -l ./ 
-
 pages:
+  stage: deploy
   script:
     - python src/fetch-events.py
     - mv dist/events.json public/events.json
@@ -41,8 +37,3 @@ pages:
       - public
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-deploy:
-  stage: deploy
-  script: echo "Define your deployment script!"
-  environment: production
