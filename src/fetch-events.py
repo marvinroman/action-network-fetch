@@ -50,8 +50,8 @@ while current_page <= total_pages:
         if arrow.get(event.get("start_date")).is_between(first_available, last_available):
             output.append({
                 "name": event.get("title")
-                , "start": arrow.get(event.get("start_date")).format("MM/DD/YYYY HH:mm")
-                , "end": arrow.get(event.get("end_date")).format("MM/DD/YYYY HH:mm") if event.get("end_date") else ""
+                , "start": arrow.get(event.get("start_date")).format("YYYY-MM-DD HH:mm")
+                , "end": arrow.get(event.get("end_date")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else ""
                 , "description": event.get("description", "")
                 , "link": event.get("browser_url")
                 , "color": "primary"
