@@ -16,11 +16,9 @@ pages:
   stage: deploy
   script:
     - ls -l
-    - ls -l dist
     - ls -l src
-    - ls -l public
     - python src/fetch-events.py
-    - mv dist/events.json public/events.json
+    - ls -l public
   artifacts:
     paths:
       - public
