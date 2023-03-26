@@ -11,10 +11,9 @@ API_KEY = os.getenv("API_KEY")
 DOMAIN = os.getenv("DOMAIN")
 EVENTS_URI = os.getenv("EVENTS_URI")
 FUTURE_DAYS = int(os.getenv("FUTURE_DAYS"))
-LOG_LEVEL = int(os.getenv("LOG_LEVEL"))
 
 # Setup logging
-logging.basicConfig(format='%(asctime)s %(message)s', filename='public/fetch.log', level=LOG_LEVEL)
+logging.basicConfig(format='%(asctime)s %(message)s', filename='public/fetch.log', level=logging.DEBUG)
 
 # setup API url
 headers = {"OSDI-API-Token": API_KEY}
