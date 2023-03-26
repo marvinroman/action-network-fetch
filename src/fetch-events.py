@@ -21,34 +21,33 @@ headers = {"OSDI-API-Token": API_KEY}
 url="https://{domain}/api/v2/{uri}".format(domain=DOMAIN,uri=EVENTS_URI)
 logging.debug("url: %s", url)
 
-# initiate variable
+# initiate variables
 current_page = 1
 total_pages = 2
 output = []
 
 # loop through pages
 while current_page <= total_pages:
-    
     # set current page to fetch
     params={"page": current_page}
     # make API call
     response=requests.get(url, headers=headers, params=params)
     # convert response to JSON object
     json_response=response.json()
-    
+
     # get paging information
     current_page = json_response["page"]
     total_pages = json_response["total_pages"]
     logging.debug("current_page: %s, total_pages: %s", current_page, total_pages)
-    
+
     # loop through returned events
     for event in json_response["_embedded"]["osdi:events"]:
-        
+
         # setup calendar boundaries 
-        # # TODO make dynamic once real events are created
+        # TODO: make dynamic once real events are created
         first_available = arrow.get("2020-03-01")
         last_available = arrow.get("2020-03-01").shift(days=FUTURE_DAYS)
-        
+
         # if the event is between the calendar boundaries then add to output
         if arrow.get(event["start_date"]).is_between(first_available, last_available):
             output.append({
