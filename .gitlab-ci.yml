@@ -23,31 +23,17 @@ image: python:3-alpine
 #     - .cache/pip
 #     - venv/
 
-# before_script:
-#   - python --version  # For debugging
-#   - pip install virtualenv
-#   - virtualenv venv
-#   - source venv/bin/activate
+before_script:
+  - python --version  # For debugging
+  - pip install arrow requests
 
-# test:
-#   script:
-#     - python setup.py test
-#     - pip install tox flake8  # you can also use tox
-#     - tox -e py36,flake8
-
-# run:
-#   script:
-    # - python setup.py bdist_wheel
-    # an alternative approach is to install and run:
-    # - pip install dist/*
-    # run the command here
-  # artifacts:
-  #   paths:
-  #     - dist/*.whl
+test:
+  script:
+    - echo $PWD
+    - ls -l ../ 
 
 pages:
   script:
-    - pip install arrow requests
     - python src/fetch-events.py
     - mv dist/events.json public/events.json
   artifacts:
