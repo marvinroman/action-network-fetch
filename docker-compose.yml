@@ -9,6 +9,6 @@ services:
     env_file:
       - ./.env
     volumes: 
-      - "./dist:/dist"
+      - "./public:/public"
       - "./src:/src"
     command: ["/usr/bin/tail", "-f", "/dev/null"]

@@ -6,14 +6,15 @@ import os
 import arrow
 import requests
 
-# Setup logging
-logging.basicConfig(format='%(asctime)s %(message)s', filename='public/fetch.log', level=logging.INFO)
-
 # get settings
 API_KEY = os.getenv("API_KEY")
 DOMAIN = os.getenv("DOMAIN")
 EVENTS_URI = os.getenv("EVENTS_URI")
 FUTURE_DAYS = int(os.getenv("FUTURE_DAYS"))
+LOG_LEVEL = int(os.getenv("LOG_LEVEL"))
+
+# Setup logging
+logging.basicConfig(format='%(asctime)s %(message)s', filename='public/fetch.log', level=LOG_LEVEL)
 
 # setup API url
 headers = {"OSDI-API-Token": API_KEY}
@@ -43,20 +44,21 @@ while current_page <= total_pages:
     # loop through returned events
     for event in json_response["_embedded"]["osdi:events"]:
         
-        # setup calendar boundaries # TODO make dynamic once real events are created
+        # setup calendar boundaries 
+        # # TODO make dynamic once real events are created
         first_available = arrow.get("2020-03-01")
         last_available = arrow.get("2020-03-01").shift(days=FUTURE_DAYS)
         
         # if the event is between the calendar boundaries then add to output
         if arrow.get(event["start_date"]).is_between(first_available, last_available):
             output.append({
-                "name": event["title"]
-                , "start": event["start_date"]
-                , "end": event["end_date"]
-                , "description": event["description"]
-                , "link": event["browser_url"]
+                "name": event.get("title")
+                , "start": event.get("start_date")
+                , "end": event.get("end_date")
+                , "description": event.get("description", "")
+                , "link": event.get("browser_url")
                 , "color": "cyan"
-                , "timed": True
+                , "timed": bool(event.get("end_date"))
             })
 
     # move paging forward
