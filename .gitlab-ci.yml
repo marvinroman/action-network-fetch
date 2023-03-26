@@ -48,8 +48,8 @@ image: python:3-alpine
 pages:
   script:
     - pip install arrow requests
-    - python /src/fetch-events.py
-    - mv /dist/events.json ../public/events.json
+    - python src/fetch-events.py
+    - mv dist/events.json public/events.json
   artifacts:
     paths:
       - public
