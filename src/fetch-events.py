@@ -54,7 +54,7 @@ while current_page <= total_pages:
                 , "end": event.get("end_date", "")
                 , "description": event.get("description", "")
                 , "link": event.get("browser_url")
-                , "color": "crimson"
+                , "color": "primary"
                 , "timed": bool(event.get("end_date"))
             })
 
