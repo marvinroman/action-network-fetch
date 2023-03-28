@@ -47,7 +47,7 @@ while current_page <= total_pages:
         last_available = arrow.get().shift(days=FUTURE_DAYS)
 
         # if the event is between the calendar boundaries then add to output
-        if arrow.get(event.get("start_date")).is_between(first_available, last_available):
+        if arrow.get(event.get("start_date")).is_between(first_available, last_available) and event.get("status") == "confirmed":
             output.append({
                 "name": event.get("title")
                 , "start": arrow.get(event.get("start_date")).format("YYYY-MM-DD HH:mm")
