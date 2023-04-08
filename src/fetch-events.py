@@ -48,9 +48,11 @@ while current_page <= total_pages:
 
         # if the event is between the calendar boundaries then add to output
         if arrow.get(event.get("start_date")).is_between(first_available, last_available) and event.get("status") == "confirmed":
+            links = event.get("_links")
             output.append({
                 "name": event.get("title")
                 , "start": arrow.get(event.get("start_date")).format("YYYY-MM-DD HH:mm")
+                , "embed": links.get("action_network:embed")
                 , "end": arrow.get(event.get("end_date")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else ""
                 , "description": event.get("description", "")
                 , "link": event.get("browser_url")
