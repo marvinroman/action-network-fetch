@@ -25,6 +25,25 @@ current_page = 1
 total_pages = 2
 output = []
 
+def getEmbed(event):
+    if bool(event.get("_links")) == False:
+        return ""
+    
+    links = event.get("_links")
+    
+    if bool(links.get("action_network:embed")) == False:
+        return ""
+    
+    embed_url = links.get("action_network:embed")
+        
+    # make API call
+    response=requests.get(embed_url.get("href"), headers=headers)
+    # convert response to JSON object
+    json_response=response.json()
+    
+    return json_response.get("embed_standard_no_styles")
+    
+
 # loop through pages
 while current_page <= total_pages:
     # set current page to fetch
@@ -48,11 +67,10 @@ while current_page <= total_pages:
 
         # if the event is between the calendar boundaries then add to output
         if arrow.get(event.get("start_date")).is_between(first_available, last_available) and event.get("status") == "confirmed":
-            links = event.get("_links")
             output.append({
                 "name": event.get("title")
                 , "start": arrow.get(event.get("start_date")).format("YYYY-MM-DD HH:mm")
-                , "embed": links.get("action_network:embed")
+                , "embed": getEmbed(event)
                 , "end": arrow.get(event.get("end_date")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else ""
                 , "description": event.get("description", "")
                 , "link": event.get("browser_url")
