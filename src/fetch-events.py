@@ -1,9 +1,10 @@
 #!/usr/local/bin/python
 
+import arrow
 import json
 import logging
 import os
-import arrow
+import re
 import requests
 
 # get settings
@@ -27,12 +28,12 @@ output = []
 
 def getEmbed(event):
     if bool(event.get("_links")) == False:
-        return ""
+        return {}
     
     links = event.get("_links")
     
     if bool(links.get("action_network:embed")) == False:
-        return ""
+        return {}
     
     embed_url = links.get("action_network:embed")
         
@@ -41,7 +42,17 @@ def getEmbed(event):
     # convert response to JSON object
     json_response=response.json()
     
-    return json_response.get("embed_standard_no_styles")
+    embed_full_no_styles = json_response.get("embed_full_no_styles")
+    
+    match = re.search("src='([^']+)'.*id='([^']+)'", embed_full_no_styles)
+    
+    if match:
+        return {
+            "src": match.group(1)
+            , "id": match.group(2)
+        }
+    else:
+        return {}
     
 
 # loop through pages
