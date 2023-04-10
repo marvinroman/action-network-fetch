@@ -15,10 +15,7 @@ before_script:
 pages:
   stage: deploy
   script:
-    - ls -l
-    - ls -l src
     - python src/fetch-events.py
-    - ls -l public
   artifacts:
     paths:
       - public

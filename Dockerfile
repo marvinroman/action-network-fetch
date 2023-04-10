@@ -5,8 +5,6 @@ RUN pip install \
     requests
 
 COPY src /src 
-COPY dist /dist
+COPY public /public
 
-WORKDIR /src
-
-CMD ["/src/fetch-events.py"]
+CMD ["python", "/src/fetch-events.py"]
