@@ -1,4 +1,4 @@
-# pylint: disable=invalid-name,import-error,consider-using-f-string,missing-module-docstring
+# pylint: disable=invalid-name,import-error,consider-using-f-string,missing-module-docstring,line-too-long
 
 import json
 import logging
@@ -12,6 +12,7 @@ API_KEY = os.getenv("API_KEY")
 DOMAIN = os.getenv("DOMAIN")
 EVENTS_URI = os.getenv("EVENTS_URI")
 FUTURE_DAYS = int(os.getenv("FUTURE_DAYS"))
+PAST_DAYS = int(os.getenv("PAST_DAYS"))
 
 # Setup logging
 logging.basicConfig(format='%(asctime)s %(message)s',
@@ -83,13 +84,20 @@ while current_page <= total_pages:
     for event in json_response["_embedded"]["osdi:events"]:
 
         # setup calendar boundaries
-        first_available = arrow.get()
+        first_available = arrow.get().shift(days=-PAST_DAYS)
         last_available = arrow.get().shift(days=FUTURE_DAYS)
 
         # if the event is between the calendar boundaries then add to output
         if arrow.get(event.get("start_date")).is_between(first_available, last_available) and event.get("status") == "confirmed":
             output.append({
-                "name": event.get("title"), "start": arrow.get(event.get("start_date")).format("YYYY-MM-DD HH:mm"), "embed": getEmbed(event), "end": arrow.get(event.get("end_date")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else "", "description": event.get("description", ""), "link": event.get("browser_url"), "color": "primary", "timed": bool(event.get("end_date"))
+                "name": event.get("title"), 
+                "start": arrow.get(event.get("start_date")).format("YYYY-MM-DD HH:mm"), 
+                "embed": getEmbed(event), 
+                "end": arrow.get(event.get("end_date")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else "", 
+                "description": event.get("description", ""), 
+                "link": event.get("browser_url"), 
+                "color": "primary", 
+                "timed": bool(event.get("end_date"))
             })
 
     # move paging forward
