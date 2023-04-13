@@ -95,6 +95,7 @@ while current_page <= total_pages:
                 "embed": getEmbed(event), 
                 "end": arrow.get(event.get("end_date")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else "", 
                 "description": event.get("description", ""), 
+                "featured_image_url": event.get("featured_image_url", ""),
                 "link": event.get("browser_url"), 
                 "color": "primary", 
                 "timed": bool(event.get("end_date"))
