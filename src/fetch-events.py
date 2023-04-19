@@ -96,6 +96,9 @@ while current_page <= total_pages:
                 "end": arrow.get(event.get("end_date")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else "", 
                 "description": event.get("description", ""), 
                 "featured_image_url": event.get("featured_image_url", ""),
+                "instructions": event.get("instructions", ""),
+                "location": event.get("location"),
+                "uid": event.get("identifiers"),
                 "link": event.get("browser_url"), 
                 "color": "primary", 
                 "timed": bool(event.get("end_date"))
