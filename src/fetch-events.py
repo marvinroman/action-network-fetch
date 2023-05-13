@@ -31,9 +31,8 @@ def get_event_embed(event, headers):
 
     # make API call
     response = requests.get(embed_url, headers=headers, timeout=10)
-    # convert embed_response to JSON object
-    json_response = response.json()
-    embed_full_no_styles = json_response.get("embed_full_no_styles", "")
+    response.raise_for_status()
+    embed_full_no_styles = response.json().get("embed_full_no_styles", "")
     match = re.search("src='([^']+)'.*id='([^']+)'", embed_full_no_styles)
 
     if match:
@@ -45,26 +44,19 @@ output = []
 
 # Loop through API keys
 for api_key in (key for key in API_KEYS):
-    current_page = 1
-    total_pages = 2
     headers = {'OSDI-API-Token': api_key}
+    params = {
+        "filter": f"start_date gt '{arrow.get().shift(days=-PAST_DAYS).format('YYYY-MM-DD')}'"
+    }
+    response = requests.get(URL, headers=headers, params=params, timeout=10)
+    response.raise_for_status()
 
     # loop through pages
-    while current_page <= total_pages:
-        params = {
-            "page": current_page,
-            "filter": f"start_date gt '{arrow.get().shift(days=-PAST_DAYS).format('YYYY-MM-DD')}'"
-        }
-        response = requests.get(URL, headers=headers, params=params, timeout=10)
-        json_response = response.json()
-
-        # get paging information
-        current_page = json_response.get('page', current_page)
-        total_pages = json_response.get('total_pages', total_pages)
-        logging.debug('current_page: %s, total_pages: %s', current_page, total_pages)
+    while response.json().get("_links", {}).get("next"):
+        logging.debug('next page: %s', response.json().get("_links", {}).get("next"))
 
         # loop through returned events
-        for event in json_response.get('_embedded', {}).get('osdi:events', []):
+        for event in response.json().get('_embedded', {}).get('osdi:events', []):
 
             # if the event is between the calendar boundaries then add to output
             if event.get("status") == "confirmed":
@@ -84,8 +76,9 @@ for api_key in (key for key in API_KEYS):
                     "timed": bool(event.get("end_date"))
                 })
 
-        # move paging forward
-        current_page += 1
+        # get next page
+        response = requests.get(response.json().get("_links", {}).get("next", {}).get("href"), headers=headers, timeout=10)
+        response.raise_for_status()
 
 # write out content
 with open('public/events.json', 'w', encoding='utf-8') as f:
