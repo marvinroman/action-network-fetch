@@ -1,3 +1,5 @@
+# pylint: disable=import-error,missing-module-docstring,redefined-outer-name,invalid-name,line-too-long
+
 # Import necessary modules
 import json
 import logging
