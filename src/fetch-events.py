@@ -73,7 +73,7 @@ for api_key in (key for key in API_KEYS):
                     "group": event.get("action_network:sponsor", {}).get("title", ""),
                     "start": arrow.get(event.get("start_date", "")).format("YYYY-MM-DD HH:mm"),
                     "embed": get_event_embed(event, headers),
-                    "end": arrow.get(event.get("end_date", "")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else "",
+                    "end": arrow.get(event.get("end_date", "")).format("YYYY-MM-DD HH:mm") if event.get("end_date") else arrow.get(event.get("start_date", "")).shift(hours=2).format("YYYY-MM-DD HH:mm"),
                     "description": event.get("description", ""),
                     "featured_image_url": event.get("featured_image_url", ""),
                     "instructions": event.get("instructions", ""),

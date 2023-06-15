@@ -1,0 +1,55 @@
+name: Python Script and JSON Deployment
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # Run every 15 minutes
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.1' # Replace with the desired Python version
+
+    - name: Install dependencies
+      run: pip install -r src/requirements.txt # Replace with your dependencies file if necessary
+      
+    - name: Set environment variables
+      env:
+        API_KEYS: "${{ secrets.SECRET_NAME1 }}"
+        DOMAIN: "${{ vars.DOMAIN }}"
+        EVENTS_URI: "${{ vars.EVENTS_URI }}"
+        PAST_DAYS: "${{ vars.PAST_DAYS }}"
+        URL: "${{ vars.URL }}"
+
+    - name: Run Python script
+      run: python src/fetch-events.py # Replace with the path to your Python script
+
+    - name: Disable jekyll rules for the site
+      run: touch public/.nojekyll
+
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: "public"
+  
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
