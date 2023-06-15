@@ -8,10 +8,10 @@ on:
       - main
 
 env:
-  API_KEYS: "${{ secrets.SECRET_NAME1 }}"
-  DOMAIN: "${{ vars.DOMAIN }}"
-  EVENTS_URI: "${{ vars.EVENTS_URI }}"
-  PAST_DAYS: "${{ vars.PAST_DAYS }}"
+  API_KEYS: ${{ secrets.SECRET_NAME1 }}
+  DOMAIN: ${{ vars.DOMAIN }}
+  EVENTS_URI: ${{ vars.EVENTS_URI }}
+  PAST_DAYS: ${{ vars.PAST_DAYS }}
 
 jobs:
   build:
