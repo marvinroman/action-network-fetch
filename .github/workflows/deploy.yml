@@ -7,6 +7,13 @@ on:
     branches:
       - main
 
+env:
+  API_KEYS: "${{ secrets.SECRET_NAME1 }}"
+  DOMAIN: "${{ vars.DOMAIN }}"
+  EVENTS_URI: "${{ vars.EVENTS_URI }}"
+  PAST_DAYS: "${{ vars.PAST_DAYS }}"
+  PYTHON_VERSION: "3.11.4"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,21 +25,13 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.1' # Replace with the desired Python version
+        python-version: $PYTHON_VERSION
 
     - name: Install dependencies
-      run: pip install -r src/requirements.txt # Replace with your dependencies file if necessary
+      run: pip install -r src/requirements.txt 
       
-    - name: Set environment variables
-      env:
-        API_KEYS: "${{ secrets.SECRET_NAME1 }}"
-        DOMAIN: "${{ vars.DOMAIN }}"
-        EVENTS_URI: "${{ vars.EVENTS_URI }}"
-        PAST_DAYS: "${{ vars.PAST_DAYS }}"
-        URL: "${{ vars.URL }}"
-
     - name: Run Python script
-      run: python src/fetch-events.py # Replace with the path to your Python script
+      run: python src/fetch-events.py 
 
     - name: Disable jekyll rules for the site
       run: touch public/.nojekyll
