@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  API_KEYS: ${{ secrets.SECRET_NAME1 }}
+  API_KEYS: ${{ secrets.API_KEYS }}
   DOMAIN: ${{ vars.DOMAIN }}
   EVENTS_URI: ${{ vars.EVENTS_URI }}
   PAST_DAYS: ${{ vars.PAST_DAYS }}
