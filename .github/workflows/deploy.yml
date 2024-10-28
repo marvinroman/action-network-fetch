@@ -2,7 +2,7 @@ name: Python Script and JSON Deployment
 
 on:
   schedule:
-    - cron: '*/25 * * * *' # Run every 25 minutes
+    - cron: '*/20 * * * *' # Run every 25 minutes
   push:
     branches:
       - main
